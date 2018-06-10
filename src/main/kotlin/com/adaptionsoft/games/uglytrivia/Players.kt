@@ -2,7 +2,7 @@ package com.adaptionsoft.games.uglytrivia
 
 class Players {
     private var index = 0
-    val players = ArrayList<Player>()
+    private val players = ArrayList<Player>()
 
     fun count(): Int = players.size
 
@@ -20,6 +20,4 @@ class Players {
         if (index == count())
             index = 0
     }
-
-
 }

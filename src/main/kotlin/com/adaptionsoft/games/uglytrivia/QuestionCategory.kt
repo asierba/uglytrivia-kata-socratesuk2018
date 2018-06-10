@@ -10,13 +10,9 @@ class QuestionCategory (val name: String){
         generateDummyQuestions()
     }
 
-    fun addQuestion(question: String) {
-        questions.addLast(question)
-    }
-
     fun generateDummyQuestions() {
-        for (i in 0..49) {
-            addQuestion("$name Question $i")
+        (0..49).forEach {
+            questions.addLast("$name Question $it")
         }
     }
 
