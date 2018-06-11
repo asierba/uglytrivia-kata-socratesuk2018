@@ -1,17 +1,17 @@
 package com.adaptionsoft.games.uglytrivia
 
 class Game {
-    var players = Players()
+    var board = Board()
 
-    val popCategory = QuestionCategory("Pop")
-    val scienceCategory = QuestionCategory("Science")
-    val sportsCategory = QuestionCategory("Sports")
-    val rockCategory = QuestionCategory("Rock")
+    private val popCategory = QuestionCategory("Pop")
+    private val scienceCategory = QuestionCategory("Science")
+    private val sportsCategory = QuestionCategory("Sports")
+    private val rockCategory = QuestionCategory("Rock")
 
     fun add(playerName: String): Boolean {
-        players.add(Player(playerName))
+        board.add(Player(playerName))
         println(playerName + " was added")
-        println("They are player number " + players.count())
+        println("They are player number " + board.numberOfPlayers)
         return true
     }
 
@@ -33,47 +33,39 @@ class Game {
             }
 
             currentPlayer().move(roll)
-            println("${currentPlayer().name}'s new location is ${currentPlayer().place}")
-            println("The category is " + currentCategory().name)
-            askQuestion()
+            println("${currentPlayer().name}'s new location is ${currentPlayer().location}")
+            println("The category is " + board.categoryName)
+            println(board.takeCard())
         }
 
     }
 
-    private fun askQuestion() {
-        println(currentCategory().takeCard())
-    }
-
-    private fun currentCategory(): QuestionCategory = when (currentPlayer().place) {
-        0, 4, 8 -> popCategory
-        1, 5, 9 -> scienceCategory
-        2, 6, 10 -> sportsCategory
-        else -> rockCategory
-    }
+    private fun currentPlayer() = board.currentPlayer
 
     fun wasCorrectlyAnswered(): Boolean {
-        val player = currentPlayer()
-        return if (player.isInPenaltyBox && !player.isGettingOutOfPenaltyBox) {
-            players.nextPlayer()
-            true
-        } else {
+        var notAWinner = true
+
+        if (!currentPlayer().staysInPenaltyBox()) {
+            currentPlayer().incrementScore()
             println("Answer was correct!!!!")
-            player.incrementScore()
-            println("${player.name} now has ${player.purse} Gold Coins.")
-            players.nextPlayer()
-            !player.isWinner()
+            println("${currentPlayer().name} now has ${currentPlayer().score} Gold Coins.")
+            notAWinner = !currentPlayer().isWinner()
         }
+        board.advanceToNextPlayer()
+
+        return notAWinner
+
     }
 
     fun wrongAnswer(): Boolean {
         println("Question was incorrectly answered")
-        println(currentPlayer().name + " was sent to the penalty box")
-        currentPlayer().isInPenaltyBox = true
+        println("${currentPlayer().name} was sent to the penalty box")
 
-        players.nextPlayer()
+        currentPlayer().goesToPenaltyBox()
+
+        board.advanceToNextPlayer()
         return true
     }
 
-    private fun currentPlayer() = players.getCurrentPlayer()
 
 }
