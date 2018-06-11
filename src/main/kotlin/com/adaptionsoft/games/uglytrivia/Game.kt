@@ -1,15 +1,13 @@
 package com.adaptionsoft.games.uglytrivia
 
-class Game {
-    var board = Board()
+import com.adaptionsoft.games.uglytrivia.MoveResult.*
 
-    private val popCategory = QuestionCategory("Pop")
-    private val scienceCategory = QuestionCategory("Science")
-    private val sportsCategory = QuestionCategory("Sports")
-    private val rockCategory = QuestionCategory("Rock")
+class Game {
+    private var board = Board()
 
     fun add(playerName: String): Boolean {
         board.add(Player(playerName))
+
         println(playerName + " was added")
         println("They are player number " + board.numberOfPlayers)
         return true
@@ -18,38 +16,37 @@ class Game {
     fun roll(roll: Int) = roll(Roll(roll))
 
     private fun roll(roll: Roll) {
-        println(currentPlayer().name + " is the current player")
+        val currentPlayer = board.currentPlayer
+        println(currentPlayer.name + " is the current player")
         println("They have rolled a " + roll.value)
 
-        if (currentPlayer().stuckInPenaltyBox(roll)) {
-            println("${currentPlayer().name} is not getting out of the penalty box")
-            currentPlayer().isGettingOutOfPenaltyBox = false
+        val moveState = currentPlayer.move(roll)
+        if (moveState == STUCK_IN_PENALTY_BOX) {
+            println("${currentPlayer.name} is not getting out of the penalty box")
+            return
         }
-        else {
 
-            if (currentPlayer().isInPenaltyBox) {
-                println("${currentPlayer().name} is getting out of the penalty box")
-                currentPlayer().isGettingOutOfPenaltyBox = true
-            }
-
-            currentPlayer().move(roll)
-            println("${currentPlayer().name}'s new location is ${currentPlayer().location}")
-            println("The category is " + board.categoryName)
-            println(board.takeCard())
+        if (moveState == GETTING_OUT_PENALTY_BOX) {
+            println("${currentPlayer.name} is getting out of the penalty box")
         }
+
+        val card = board.popQuestion()
+
+        println("${currentPlayer.name}'s new location is ${currentPlayer.location}")
+        println("The category is " + board.categoryName)
+        println(card)
 
     }
-
-    private fun currentPlayer() = board.currentPlayer
 
     fun wasCorrectlyAnswered(): Boolean {
         var notAWinner = true
 
-        if (!currentPlayer().staysInPenaltyBox()) {
-            currentPlayer().incrementScore()
+        val currentPlayer = board.currentPlayer
+        if (currentPlayer.lastMove != STUCK_IN_PENALTY_BOX) {
+            currentPlayer.incrementScore()
             println("Answer was correct!!!!")
-            println("${currentPlayer().name} now has ${currentPlayer().score} Gold Coins.")
-            notAWinner = !currentPlayer().isWinner()
+            println("${currentPlayer.name} now has ${currentPlayer.score} Gold Coins.")
+            notAWinner = !currentPlayer.isWinner()
         }
         board.advanceToNextPlayer()
 
@@ -58,10 +55,11 @@ class Game {
     }
 
     fun wrongAnswer(): Boolean {
+        val currentPlayer = board.currentPlayer
         println("Question was incorrectly answered")
-        println("${currentPlayer().name} was sent to the penalty box")
+        println("${currentPlayer.name} was sent to the penalty box")
 
-        currentPlayer().goesToPenaltyBox()
+        currentPlayer.goesToPenaltyBox()
 
         board.advanceToNextPlayer()
         return true
