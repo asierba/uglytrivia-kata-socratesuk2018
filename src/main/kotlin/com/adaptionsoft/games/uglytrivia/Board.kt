@@ -1,23 +1,27 @@
 package com.adaptionsoft.games.uglytrivia
 
 class Board {
+    companion object {
+        const val size = 12
+    }
+
     private var currentPlayerIndex = 0
     private val players = ArrayList<Player>()
 
-    private val popCategory = QuestionCategory("Pop")
-    private val scienceCategory = QuestionCategory("Science")
-    private val sportsCategory = QuestionCategory("Sports")
-    private val rockCategory = QuestionCategory("Rock")
+    private val popQuestions = QuestionBox("Pop")
+    private val scienceQuestions = QuestionBox("Science")
+    private val sportsQuestions = QuestionBox("Sports")
+    private val rockQuestions = QuestionBox("Rock")
 
-    val categoryName get() = questionCategory.name
+    val categoryName get() = questionBox.categoryName
     val numberOfPlayers get() = players.size
     val currentPlayer get() = players[currentPlayerIndex]
 
-    private val questionCategory get() = when (currentPlayer.location) {
-        0, 4, 8 -> popCategory
-        1, 5, 9 -> scienceCategory
-        2, 6, 10 -> sportsCategory
-        else -> rockCategory
+    private val questionBox get() = when (currentPlayer.location) {
+        0, 4, 8 -> popQuestions
+        1, 5, 9 -> scienceQuestions
+        2, 6, 10 -> sportsQuestions
+        else -> rockQuestions
     }
 
     fun add(player: Player) {
@@ -30,5 +34,5 @@ class Board {
             currentPlayerIndex = 0
     }
 
-    fun takeCard() : String = questionCategory.takeCard()
+    fun popQuestion() : String = questionBox.popQuestion()
 }

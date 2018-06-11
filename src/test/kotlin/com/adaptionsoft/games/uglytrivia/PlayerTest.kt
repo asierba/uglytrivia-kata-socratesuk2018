@@ -13,24 +13,24 @@ class PlayerTest {
 
     @Test
     fun moveMovesThePlayerForwardFromSpaceZero() {
-        player.move(Roll(3))
+        player.innerMove(Roll(3))
 
         assertEquals(3, player.location)
     }
 
     @Test
     fun moveMovesThePlayerFrowardFromNonZeroPlace() {
-        player.move(Roll(3))
-        player.move(Roll(2))
+        player.innerMove(Roll(3))
+        player.innerMove(Roll(2))
 
         assertEquals(5, player.location)
     }
 
     @Test
     fun moveWrapsAroundTheBoard() {
-        player.move(Roll(6))
-        player.move(Roll(5))
-        player.move(Roll(3))
+        player.innerMove(Roll(6))
+        player.innerMove(Roll(5))
+        player.innerMove(Roll(3))
 
         assertEquals(2, player.location)
     }
