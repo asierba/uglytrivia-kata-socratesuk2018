@@ -8,14 +8,14 @@ class PlayerTest {
 
     @Test
     fun playerStartsInPlaceZero() {
-        assertEquals(0, player.place)
+        assertEquals(0, player.location)
     }
 
     @Test
     fun moveMovesThePlayerForwardFromSpaceZero() {
         player.move(Roll(3))
 
-        assertEquals(3, player.place)
+        assertEquals(3, player.location)
     }
 
     @Test
@@ -23,7 +23,7 @@ class PlayerTest {
         player.move(Roll(3))
         player.move(Roll(2))
 
-        assertEquals(5, player.place)
+        assertEquals(5, player.location)
     }
 
     @Test
@@ -32,14 +32,14 @@ class PlayerTest {
         player.move(Roll(5))
         player.move(Roll(3))
 
-        assertEquals(2, player.place)
+        assertEquals(2, player.location)
     }
 
     @Test
     fun `can increment the score`() {
         player.incrementScore()
 
-        assertEquals(1, player.purse)
+        assertEquals(1, player.score)
     }
 
     @Test
