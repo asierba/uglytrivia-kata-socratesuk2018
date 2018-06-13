@@ -8,40 +8,17 @@ import java.io.*
 import java.util.*
 
 
-fun run() {
-    val aGame = Game()
-
-    aGame.add("Chet")
-    aGame.add("Pat")
-    aGame.add("Sue")
-
-    val rand = Random(1)
-
-    do {
-
-        aGame.roll(rand.nextInt(5) + 1)
-
-        if (rand.nextInt(9) == 7) {
-            GameRunner.notAWinner = aGame.wrongAnswer()
-        } else {
-            GameRunner.notAWinner = aGame.wasCorrectlyAnswered()
-        }
-
-
-    } while (GameRunner.notAWinner)
-
-}
-
-
 class GameTest {
     @Test
     fun golden_master() {
+        GameRunner.getRandom = {  Random(1) }
+
         val baos = ByteArrayOutputStream()
         val ps = PrintStream(baos)
         val old = System.out
         System.setOut(ps)
 
-        run()
+        main(arrayOf())
 
         val actual = baos.toString()
 

@@ -5,16 +5,18 @@ import java.util.*
 
 object GameRunner {
     var notAWinner: Boolean = false
+    var getRandom = {  Random() }
 }
 
 fun main(args: Array<String>) {
     val aGame = Game()
 
+
     aGame.add("Chet")
     aGame.add("Pat")
     aGame.add("Sue")
 
-    val rand = Random()
+    val rand = GameRunner.getRandom()
 
     do {
 
