@@ -35,26 +35,19 @@ class Game {
         println("${currentPlayer.name}'s new location is ${currentPlayer.location}")
         println("The category is " + board.categoryName)
         println(card)
-
     }
 
-    fun wasCorrectlyAnswered(): Boolean {
-        var notAWinner = true
-
+    fun wasCorrectlyAnswered() {
         val currentPlayer = board.currentPlayer
         if (currentPlayer.lastMove != STUCK_IN_PENALTY_BOX) {
             currentPlayer.incrementScore()
             println("Answer was correct!!!!")
             println("${currentPlayer.name} now has ${currentPlayer.score} Gold Coins.")
-            notAWinner = !currentPlayer.isWinner()
         }
         board.advanceToNextPlayer()
-
-        return notAWinner
-
     }
 
-    fun wrongAnswer(): Boolean {
+    fun wrongAnswer() {
         val currentPlayer = board.currentPlayer
         println("Question was incorrectly answered")
         println("${currentPlayer.name} was sent to the penalty box")
@@ -62,8 +55,7 @@ class Game {
         currentPlayer.goesToPenaltyBox()
 
         board.advanceToNextPlayer()
-        return true
     }
 
-
+    fun isFinished(): Boolean = board.hasAWinner()
 }

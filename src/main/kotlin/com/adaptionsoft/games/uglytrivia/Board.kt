@@ -35,4 +35,6 @@ class Board {
     }
 
     fun popQuestion() : String = questionBox.popQuestion()
+
+    fun hasAWinner(): Boolean = players.stream().anyMatch { it.isWinner() }
 }
