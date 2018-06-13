@@ -15,7 +15,7 @@ class QuestionBox (private val categoryName: String){
         }
     }
 
-    fun popQuestion(): Question {
+    fun takeQuestion(): Question {
         return questions.removeFirst()
     }
 }
