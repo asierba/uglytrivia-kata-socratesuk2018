@@ -8,8 +8,7 @@ class Game {
     fun add(playerName: String): Boolean {
         board.add(Player(playerName))
 
-        println(playerName + " was added")
-        println("They are player number " + board.numberOfPlayers)
+        displayPlayerAdded(playerName)
         return true
     }
 
@@ -17,8 +16,7 @@ class Game {
 
     private fun roll(roll: Roll) {
         val currentPlayer = board.currentPlayer
-        println(currentPlayer.name + " is the current player")
-        println("They have rolled a " + roll.value)
+        displayRollResult(currentPlayer, roll)
 
         val moveState = currentPlayer.move(roll)
         if (moveState == STUCK_IN_PENALTY_BOX) {
@@ -30,32 +28,50 @@ class Game {
             println("${currentPlayer.name} is getting out of the penalty box")
         }
 
-        val card = board.popQuestion()
+        val question = board.popQuestion()
 
         println("${currentPlayer.name}'s new location is ${currentPlayer.location}")
-        println("The category is " + board.categoryName)
-        println(card)
+        displayQuestionDetails(question)
     }
 
     fun wasCorrectlyAnswered() {
-        val currentPlayer = board.currentPlayer
-        if (currentPlayer.lastMove != STUCK_IN_PENALTY_BOX) {
-            currentPlayer.incrementScore()
-            println("Answer was correct!!!!")
-            println("${currentPlayer.name} now has ${currentPlayer.score} Gold Coins.")
+        if (board.currentPlayer.lastMove != STUCK_IN_PENALTY_BOX) {
+            board.currentPlayer.incrementScore()
+            displayCorrectAnswer(board.currentPlayer)
         }
         board.advanceToNextPlayer()
     }
 
     fun wrongAnswer() {
-        val currentPlayer = board.currentPlayer
-        println("Question was incorrectly answered")
-        println("${currentPlayer.name} was sent to the penalty box")
-
-        currentPlayer.goesToPenaltyBox()
-
+        displayWrongAnswer(board.currentPlayer)
+        board.currentPlayer.goesToPenaltyBox()
         board.advanceToNextPlayer()
     }
 
     fun isFinished(): Boolean = board.hasAWinner()
+
+    private fun displayPlayerAdded(playerName: String) {
+        println("$playerName was added")
+        println("They are player number " + board.numberOfPlayers)
+    }
+
+    private fun displayQuestionDetails(question: String) {
+        println("The category is " + board.categoryName)
+        println(question)
+    }
+
+    private fun displayRollResult(currentPlayer: Player, roll: Roll) {
+        println("${currentPlayer.name} is the current player")
+        println("They have rolled a ${roll.value}")
+    }
+
+    private fun displayCorrectAnswer(currentPlayer: Player) {
+        println("Answer was correct!!!!")
+        println("${currentPlayer.name} now has ${currentPlayer.score} Gold Coins.")
+    }
+
+    private fun displayWrongAnswer(currentPlayer: Player) {
+        println("Question was incorrectly answered")
+        println("${currentPlayer.name} was sent to the penalty box")
+    }
 }
