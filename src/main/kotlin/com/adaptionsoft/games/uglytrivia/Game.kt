@@ -3,11 +3,9 @@ package com.adaptionsoft.games.uglytrivia
 class Game {
     private var board = Board()
 
-    fun add(playerName: String): Boolean {
+    fun add(playerName: String) {
         board.add(Player(playerName))
-
         displayPlayerAdded(playerName)
-        return true
     }
 
     fun roll(roll: Int) = roll(Roll(roll))
@@ -19,15 +17,15 @@ class Game {
         currentPlayer.move(roll)
 
         if (currentPlayer.isStuckInPenaltyBox()) {
-            println("${currentPlayer.name} is not getting out of the penalty box")
+            displayPlayerStuckInPenaltyBox(currentPlayer)
             return
         }
 
         if (currentPlayer.isGettingOutOfPenaltyBox()) {
-            println("${currentPlayer.name} is getting out of the penalty box")
+            displayPlayerGettingOut(currentPlayer)
         }
 
-        println("${currentPlayer.name}'s new location is ${currentPlayer.location}")
+        displayPlayerLocation(currentPlayer)
 
         val question = board.popQuestion()
         displayQuestionDetails(question)
@@ -52,6 +50,18 @@ class Game {
     private fun displayPlayerAdded(playerName: String) {
         println("$playerName was added")
         println("They are player number " + board.numberOfPlayers)
+    }
+
+    private fun displayPlayerLocation(currentPlayer: Player) {
+        println("${currentPlayer.name}'s new location is ${currentPlayer.location}")
+    }
+
+    private fun displayPlayerGettingOut(currentPlayer: Player) {
+        println("${currentPlayer.name} is getting out of the penalty box")
+    }
+
+    private fun displayPlayerStuckInPenaltyBox(currentPlayer: Player) {
+        println("${currentPlayer.name} is not getting out of the penalty box")
     }
 
     private fun displayQuestionDetails(question: String) {
