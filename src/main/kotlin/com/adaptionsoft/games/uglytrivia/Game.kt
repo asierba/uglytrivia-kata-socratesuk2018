@@ -28,14 +28,14 @@ class Game {
             println("${currentPlayer.name} is getting out of the penalty box")
         }
 
-        val question = board.popQuestion()
-
         println("${currentPlayer.name}'s new location is ${currentPlayer.location}")
+
+        val question = board.popQuestion()
         displayQuestionDetails(question)
     }
 
     fun wasCorrectlyAnswered() {
-        if (board.currentPlayer.lastMove != STUCK_IN_PENALTY_BOX) {
+        if (!board.currentPlayer.isStuckInPenaltyBox()) {
             board.currentPlayer.incrementScore()
             displayCorrectAnswer(board.currentPlayer)
         }

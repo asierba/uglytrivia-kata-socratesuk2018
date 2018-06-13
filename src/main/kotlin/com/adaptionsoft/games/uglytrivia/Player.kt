@@ -11,7 +11,7 @@ data class Player(val name: String) {
     var score: Int = 0
 
     private var isInPenaltyBox: Boolean = false
-    var lastMove: MoveResult = NORMAL_MOVE
+    private var lastMove: MoveResult = NORMAL_MOVE
 
     fun innerMove(roll: Roll) {
         location = (location + roll.value) % Board.size
@@ -46,6 +46,9 @@ data class Player(val name: String) {
     fun goesToPenaltyBox() {
         isInPenaltyBox = true
     }
+
+    fun isStuckInPenaltyBox() = lastMove == STUCK_IN_PENALTY_BOX
+
 }
 
 class CannotIncrementScore : Exception()
