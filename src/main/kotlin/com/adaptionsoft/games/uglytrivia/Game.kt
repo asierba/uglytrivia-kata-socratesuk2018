@@ -1,7 +1,5 @@
 package com.adaptionsoft.games.uglytrivia
 
-import com.adaptionsoft.games.uglytrivia.MoveResult.*
-
 class Game {
     private var board = Board()
 
@@ -18,13 +16,14 @@ class Game {
         val currentPlayer = board.currentPlayer
         displayRollResult(currentPlayer, roll)
 
-        val moveState = currentPlayer.move(roll)
-        if (moveState == STUCK_IN_PENALTY_BOX) {
+        currentPlayer.move(roll)
+
+        if (currentPlayer.isStuckInPenaltyBox()) {
             println("${currentPlayer.name} is not getting out of the penalty box")
             return
         }
 
-        if (moveState == GETTING_OUT_PENALTY_BOX) {
+        if (currentPlayer.isGettingOutOfPenaltyBox()) {
             println("${currentPlayer.name} is getting out of the penalty box")
         }
 
