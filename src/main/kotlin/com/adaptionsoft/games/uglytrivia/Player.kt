@@ -30,7 +30,7 @@ data class Player(val name: String) {
 
     fun isWinner(): Boolean = score == winningScore
 
-    fun goesToPenaltyBox() {
+    fun goToPenaltyBox() {
         isInPenaltyBox = true
     }
 

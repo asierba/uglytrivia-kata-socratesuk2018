@@ -4,8 +4,9 @@ class Game {
     private var board = Board()
 
     fun add(playerName: String) {
-        board.add(Player(playerName))
-        displayPlayerAdded(playerName)
+        val player = Player(playerName)
+        board.add(player)
+        displayPlayerAdded(player)
     }
 
     fun roll(roll: Int) = roll(Roll(roll))
@@ -15,19 +16,9 @@ class Game {
         displayRollResult(currentPlayer, roll)
 
         currentPlayer.move(roll)
-
-        if (currentPlayer.isStuckInPenaltyBox()) {
-            displayPlayerStuckInPenaltyBox(currentPlayer)
-            return
-        }
-
-        if (currentPlayer.isGettingOutOfPenaltyBox()) {
-            displayPlayerGettingOut(currentPlayer)
-        }
-
-        displayPlayerLocation(currentPlayer)
-
         val question = board.popQuestion()
+
+        displayStatus(currentPlayer)
         displayQuestionDetails(question)
     }
 
@@ -41,32 +32,33 @@ class Game {
 
     fun wrongAnswer() {
         displayWrongAnswer(board.currentPlayer)
-        board.currentPlayer.goesToPenaltyBox()
+        board.currentPlayer.goToPenaltyBox()
         board.advanceToNextPlayer()
     }
 
     fun isFinished(): Boolean = board.hasAWinner()
 
-    private fun displayPlayerAdded(playerName: String) {
-        println("$playerName was added")
+    private fun displayPlayerAdded(player: Player) {
+        println("${player.name} was added")
         println("They are player number " + board.numberOfPlayers)
     }
 
-    private fun displayPlayerLocation(currentPlayer: Player) {
-        println("${currentPlayer.name}'s new location is ${currentPlayer.location}")
+    private fun displayStatus(player: Player) {
+        if (player.isStuckInPenaltyBox()) {
+            println("${player.name} is not getting out of the penalty box")
+            return
+        }
+        if (player.isGettingOutOfPenaltyBox()) {
+            println("${player.name} is getting out of the penalty box")
+        }
+        println("${player.name}'s new location is ${player.location}")
     }
 
-    private fun displayPlayerGettingOut(currentPlayer: Player) {
-        println("${currentPlayer.name} is getting out of the penalty box")
-    }
+    private fun displayQuestionDetails(question: Question) {
+        if(question is NoQuestion) return
 
-    private fun displayPlayerStuckInPenaltyBox(currentPlayer: Player) {
-        println("${currentPlayer.name} is not getting out of the penalty box")
-    }
-
-    private fun displayQuestionDetails(question: String) {
-        println("The category is " + board.categoryName)
-        println(question)
+        println("The category is " + question.category)
+        println(question.value)
     }
 
     private fun displayRollResult(currentPlayer: Player, roll: Roll) {
@@ -74,13 +66,13 @@ class Game {
         println("They have rolled a ${roll.value}")
     }
 
-    private fun displayCorrectAnswer(currentPlayer: Player) {
+    private fun displayCorrectAnswer(player: Player) {
         println("Answer was correct!!!!")
-        println("${currentPlayer.name} now has ${currentPlayer.score} Gold Coins.")
+        println("${player.name} now has ${player.score} Gold Coins.")
     }
 
-    private fun displayWrongAnswer(currentPlayer: Player) {
+    private fun displayWrongAnswer(player: Player) {
         println("Question was incorrectly answered")
-        println("${currentPlayer.name} was sent to the penalty box")
+        println("${player.name} was sent to the penalty box")
     }
 }

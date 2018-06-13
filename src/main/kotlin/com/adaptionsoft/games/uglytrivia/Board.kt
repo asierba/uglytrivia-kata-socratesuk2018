@@ -13,7 +13,6 @@ class Board {
     private val sportsQuestions = QuestionBox("Sports")
     private val rockQuestions = QuestionBox("Rock")
 
-    val categoryName get() = questionBox.categoryName
     val numberOfPlayers get() = players.size
     val currentPlayer get() = players[currentPlayerIndex]
 
@@ -34,7 +33,11 @@ class Board {
             currentPlayerIndex = 0
     }
 
-    fun popQuestion() : String = questionBox.popQuestion()
+    fun popQuestion() : Question {
+        if (currentPlayer.isStuckInPenaltyBox())
+            return NoQuestion()
+        return questionBox.popQuestion()
+    }
 
     fun hasAWinner(): Boolean = players.stream().anyMatch { it.isWinner() }
 }

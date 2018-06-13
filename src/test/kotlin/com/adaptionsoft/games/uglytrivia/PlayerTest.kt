@@ -83,7 +83,7 @@ class PlayerTest {
 
     @Test
     fun `player is stuck in penalty box when rolls even number in a penalty box`() {
-        player.goesToPenaltyBox()
+        player.goToPenaltyBox()
 
         player.move(Roll(2))
 
@@ -92,7 +92,7 @@ class PlayerTest {
 
     @Test
     fun `player is not stuck in penalty box when rolls odd number in a penalty box`() {
-        player.goesToPenaltyBox()
+        player.goToPenaltyBox()
 
         player.move(Roll(1))
 
