@@ -13,24 +13,24 @@ class PlayerTest {
 
     @Test
     fun moveMovesThePlayerForwardFromSpaceZero() {
-        player.innerMove(Roll(3))
+        player.move(Roll(3))
 
         assertEquals(3, player.location)
     }
 
     @Test
     fun moveMovesThePlayerFrowardFromNonZeroPlace() {
-        player.innerMove(Roll(3))
-        player.innerMove(Roll(2))
+        player.move(Roll(3))
+        player.move(Roll(2))
 
         assertEquals(5, player.location)
     }
 
     @Test
     fun moveWrapsAroundTheBoard() {
-        player.innerMove(Roll(6))
-        player.innerMove(Roll(5))
-        player.innerMove(Roll(3))
+        player.move(Roll(6))
+        player.move(Roll(5))
+        player.move(Roll(3))
 
         assertEquals(2, player.location)
     }
@@ -74,5 +74,28 @@ class PlayerTest {
         player.incrementScore()
         player.incrementScore()
         player.incrementScore()
+    }
+
+    @Test
+    fun `player initially is not stuck penalty box`() {
+        assertFalse(player.isStuckInPenaltyBox())
+    }
+
+    @Test
+    fun `player is stuck in penalty box when rolls even number in a penalty box`() {
+        player.goesToPenaltyBox()
+
+        player.move(Roll(2))
+
+        assertTrue(player.isStuckInPenaltyBox())
+    }
+
+    @Test
+    fun `player is not stuck in penalty box when rolls odd number in a penalty box`() {
+        player.goesToPenaltyBox()
+
+        player.move(Roll(1))
+
+        assertFalse(player.isStuckInPenaltyBox())
     }
 }

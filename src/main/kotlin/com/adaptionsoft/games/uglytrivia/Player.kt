@@ -1,7 +1,5 @@
 package com.adaptionsoft.games.uglytrivia
 
-import com.adaptionsoft.games.uglytrivia.MoveResult.*
-
 data class Player(val name: String) {
     companion object {
         const val winningScore = 6
@@ -9,30 +7,19 @@ data class Player(val name: String) {
 
     var location: Int = 0
     var score: Int = 0
-
     private var isInPenaltyBox: Boolean = false
-    private var lastMove: MoveResult = NORMAL_MOVE
+    private var lastRoll: Roll = Roll.noRoll()
 
-    fun innerMove(roll: Roll) {
+    fun move(roll: Roll) {
+        if (!isStuckInPenaltyBox(roll)) {
+            moveLocation(roll)
+        }
+
+        this.lastRoll = roll
+    }
+
+    private fun moveLocation(roll: Roll) {
         location = (location + roll.value) % Board.size
-    }
-
-    fun move(roll: Roll): MoveResult {
-        lastMove = getMoveResult(roll)
-        if (lastMove != STUCK_IN_PENALTY_BOX) {
-            innerMove(roll)
-        }
-        return lastMove
-    }
-
-    private fun getMoveResult(roll: Roll) : MoveResult {
-        if (isInPenaltyBox) {
-            if (roll.isEven()) {
-                return STUCK_IN_PENALTY_BOX
-            }
-            return GETTING_OUT_PENALTY_BOX
-        }
-        return NORMAL_MOVE
     }
 
     fun incrementScore() {
@@ -47,7 +34,15 @@ data class Player(val name: String) {
         isInPenaltyBox = true
     }
 
-    fun isStuckInPenaltyBox() = lastMove == STUCK_IN_PENALTY_BOX
+    fun isStuckInPenaltyBox(): Boolean = isStuckInPenaltyBox(lastRoll)
+
+    private fun isStuckInPenaltyBox(roll:Roll): Boolean {
+        return isInPenaltyBox && roll.isEven()
+    }
+
+    fun isGettingOutOfPenaltyBox(): Boolean {
+        return isInPenaltyBox && !lastRoll.isEven()
+    }
 
 }
 
