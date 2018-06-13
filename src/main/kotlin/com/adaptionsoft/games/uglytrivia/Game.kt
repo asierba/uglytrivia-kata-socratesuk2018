@@ -13,10 +13,10 @@ class Game {
 
     private fun roll(roll: Roll) {
         val currentPlayer = board.currentPlayer
-        displayRollResult(currentPlayer, roll)
+        displayRoll(currentPlayer, roll)
 
         currentPlayer.move(roll)
-        val question = board.popQuestion()
+        val question = board.takeQuestion()
 
         displayStatus(currentPlayer)
         displayQuestionDetails(question)
@@ -61,8 +61,8 @@ class Game {
         println(question.value)
     }
 
-    private fun displayRollResult(currentPlayer: Player, roll: Roll) {
-        println("${currentPlayer.name} is the current player")
+    private fun displayRoll(player: Player, roll: Roll) {
+        println("${player.name} is the current player")
         println("They have rolled a ${roll.value}")
     }
 
